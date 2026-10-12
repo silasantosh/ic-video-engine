@@ -43,7 +43,10 @@ jobs:
           echo "day=$DAY" >> "$GITHUB_OUTPUT"
 
       - name: Render short
-        run: npx remotion render src/index.ts ICShort "out/day-${{ steps.pick.outputs.day }}-short.mp4" --props "{\"day\": ${{ steps.pick.outputs.day }}}"
+        run: |
+          npx remotion render src/index.ts ICShort \
+            "out/day-${{ steps.pick.outputs.day }}-short.mp4" \
+            --props "{\"day\": ${{ steps.pick.outputs.day }}}"
 
       - uses: actions/upload-artifact@v4
         with:
