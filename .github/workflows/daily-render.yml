@@ -1,0 +1,52 @@
+name: Daily video render
+
+# 12:30 PM IST short = 07:00 UTC | 6:30 PM IST lesson = 13:00 UTC
+# GitHub Actions is free on public repos - Rs 0.
+on:
+  schedule:
+    - cron: '0 7 * * *'
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+    inputs:
+      day:
+        description: 'Calendar day number (leave empty for today)'
+        required: false
+        type: string
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Ensure Remotion Chrome
+        run: npx remotion browser ensure
+
+      - name: Pick calendar day
+        id: pick
+        run: |
+          if [ -n "${{ inputs.day }}" ]; then
+            DAY=${{ inputs.day }}
+          else
+            START=$(date -u -d "$(jq -r .startDate content/shorts.json)" +%s)
+            NOW=$(date -u +%s)
+            DAY=$(( (NOW - START) / 86400 + 1 ))
+          fi
+          echo "day=$DAY" >> "$GITHUB_OUTPUT"
+
+      - name: Render short
+        run: npx remotion render src/index.ts ICShort "out/day-${{ steps.pick.outputs.day }}-short.mp4" --props "{\"day\": ${{ steps.pick.outputs.day }}}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: day-${{ steps.pick.outputs.day }}-videos
+          path: out/*.mp4
+          retention-days: 30

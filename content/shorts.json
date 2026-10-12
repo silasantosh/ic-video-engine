@@ -1,0 +1,86 @@
+{
+  "calendarNote": "90-day calendar started 2026-10-06. Days 1-30: one app module a day. Days 31-60: guides (80G/12A, CSR-1, FCRA, registration). Days 61-90: how-to and recaps. Short at 12:30 PM IST, lesson at 6:30 PM IST.",
+  "startDate": "2026-10-06",
+  "days": [
+    {
+      "day": 1,
+      "module": "Funding",
+      "hook": "Grants for your NGO, in one place",
+      "points": [
+        "Open impact-connect.in and tap Funding",
+        "Filter grants by state, sector and amount",
+        "Save a grant to follow its deadlines"
+      ]
+    },
+    {
+      "day": 2,
+      "module": "CSR Opportunities",
+      "hook": "Where companies post CSR projects",
+      "points": [
+        "Browse live CSR opportunities from companies",
+        "Check eligibility before you apply",
+        "Keep your 80G and 12A details ready"
+      ]
+    },
+    {
+      "day": 3,
+      "module": "Schemes",
+      "hook": "Government schemes, decoded for NGOs",
+      "points": [
+        "Search central and state schemes in one list",
+        "Read who can apply and what documents you need",
+        "Save schemes to revisit before the deadline"
+      ]
+    },
+    {
+      "day": 4,
+      "module": "Volunteering",
+      "hook": "Find volunteers who actually show up",
+      "points": [
+        "Post your volunteer need in two minutes",
+        "Volunteers near you see it first",
+        "Track sign-ups from your dashboard"
+      ]
+    },
+    {
+      "day": 5,
+      "module": "Experts",
+      "hook": "Stuck on compliance? Ask an expert",
+      "points": [
+        "Open the Experts door on Impact Connect",
+        "Find people who know FCRA, 80G and CSR-1",
+        "Send your question directly, free"
+      ]
+    },
+    {
+      "day": 6,
+      "module": "Donate",
+      "hook": "Donate to verified NGOs in your state",
+      "points": [
+        "Every NGO on Impact Connect is verified first",
+        "Pick a cause you care about",
+        "Donate directly - no middleman cut"
+      ]
+    },
+    {
+      "day": 7,
+      "module": "Learn",
+      "hook": "Learn NGO skills in 5-minute lessons",
+      "points": [
+        "Open Learn from the home screen",
+        "Short lessons on fundraising and compliance",
+        "Come back daily - new lessons keep coming"
+      ]
+    },
+    {
+      "day": 8,
+      "module": "Daan",
+      "hook": "Your old things can fund a cause",
+      "points": [
+        "List items you no longer need on Daan",
+        "NGOs request what they can use",
+        "Hand it over and see where it went"
+      ]
+    }
+  ]
+}

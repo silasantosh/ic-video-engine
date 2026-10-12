@@ -1,0 +1,21 @@
+{
+  "name": "ic-video-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Impact Connect daily video engine - Remotion shorts + lessons, rendered by GitHub Actions at Rs 0",
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "render": "remotion render src/index.ts ICShort out/ic-short.mp4"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.355",
+    "@remotion/google-fonts": "4.0.355",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "remotion": "4.0.355"
+  },
+  "devDependencies": {
+    "@types/react": "19.1.0",
+    "typescript": "5.8.3"
+  }
+}
