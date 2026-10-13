@@ -3,7 +3,7 @@
 // Writes public/voice/voiceover.mp3 + public/voice/timings.json, tracks usage in usage/usage.json.
 // NEVER logs the API key.
 import fs from 'node:fs';
-import {parseFile} from 'music-metadata';
+import {execSync} from 'node:child_process';
 
 const FPS = 30;
 const args = Object.fromEntries(process.argv.slice(2).map((a, i, arr) => a.startsWith('--') ? [a.slice(2), arr[i + 1]] : null).filter(Boolean));
@@ -49,9 +49,12 @@ if (!b64) {
 fs.mkdirSync('public/voice', {recursive: true});
 fs.writeFileSync('public/voice/voiceover.mp3', Buffer.from(b64, 'base64'));
 
-const meta = await parseFile('public/voice/voiceover.mp3', {duration: true});
-const dur = meta.format.duration;
-if (!dur || !isFinite(dur)) { console.error('could not read mp3 duration'); process.exit(1); }
+const size = fs.statSync('public/voice/voiceover.mp3').size;
+const head = fs.readFileSync('public/voice/voiceover.mp3').subarray(0, 16).toString('hex');
+console.log(`voiceover.mp3 ${size} bytes head=${head}`);
+const probeOut = execSync('npx remotion ffprobe -v error -show_entries format=duration -of csv=p=0 public/voice/voiceover.mp3').toString().trim();
+const dur = parseFloat(probeOut);
+if (!dur || !isFinite(dur)) { console.error('could not read mp3 duration; probe said: ' + probeOut); process.exit(1); }
 const totalFrames = Math.ceil(dur * FPS) + 45; // 1.5s end-card hold after voice ends
 
 // Per-line timing: share of characters, min 2s per line so text is readable.

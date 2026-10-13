@@ -80,6 +80,13 @@ jobs:
           git push || true
 
       - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: debug-voice-day-${{ steps.pick.outputs.day }}
+          path: public/voice/
+          retention-days: 7
+
+      - uses: actions/upload-artifact@v4
         with:
           name: day-${{ steps.pick.outputs.day }}-${{ steps.pick.outputs.type }}
           path: out/*.mp4
