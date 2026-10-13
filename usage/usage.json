@@ -1,0 +1,12 @@
+{
+  "total_chars": 198,
+  "total_requests": 1,
+  "log": [
+    {
+      "ts": "2026-10-13T03:11:52.393Z",
+      "day": 8,
+      "type": "short",
+      "chars": 198
+    }
+  ]
+}
