@@ -22,13 +22,11 @@ npx remotion render src/index.ts ICShort out/short.mp4 --props '{"day": 1}'
 
 Preview while editing: `npm run dev` (Remotion Studio).
 
-## Voice - dependency, not yet wired
+## Voice - Sarvam Bulbul v3 (his pick, Oct 13 2026)
 
-The voice track is a slot, not a finished wire. `public/voice/voiceover.mp3` is a **silent placeholder** so renders succeed today. The TTS audition (Indic Parler / Kokoro) is running separately; when the winner lands:
+`scripts/tts.mjs` generates the day's Hindi narration in one request per video: speaker **shreya** for the 12:30 short, **shubh** for the 6:30 lesson, hi-IN, 24000 Hz, default pace/pitch. Scene timing follows the real audio: each scene's length is its line's character share of the actual mp3 duration, so text and narration stay matched. The API key lives only in the `SARVAM_API_KEY` Actions secret - never in the repo, never printed. If the key or credits fail, the workflow fails before render: no silent or placeholder video ever ships.
 
-1. Generate that day's voiceover mp3 (eventually inside the workflow as a step before render).
-2. Drop it at `public/voice/voiceover.mp3` (or pass a URL through props) - `<Audio>` in `src/ICShort.tsx` already plays it.
-3. Adjust scene timing so narration and text stay line-by-line matched (his standing rule).
+Cost guardrail: characters are counted in `usage/usage.json` (committed back by the workflow). Rs 100 free credits is roughly 33k characters (Rs 30 per 10k). Report when about 20% remains; no top-up without his explicit yes on the amount.
 
 ## Not wired yet (on purpose)
 

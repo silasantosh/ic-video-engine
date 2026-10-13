@@ -1,3 +1,5 @@
 node_modules/
 out/
 .remotion/
+public/voice/voiceover.mp3
+public/voice/timings.json

@@ -12,6 +12,14 @@ on:
         description: 'Calendar day number (leave empty for today)'
         required: false
         type: string
+      type:
+        description: 'short or lesson'
+        required: false
+        type: string
+        default: short
+
+permissions:
+  contents: write
 
 jobs:
   render:
@@ -30,9 +38,17 @@ jobs:
       - name: Ensure Remotion Chrome
         run: npx remotion browser ensure
 
-      - name: Pick calendar day
+      - name: Pick calendar day and type
         id: pick
         run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            case "${{ github.event.schedule }}" in
+              "0 13 * * *") TYPE=lesson ;;
+              *) TYPE=short ;;
+            esac
+          else
+            TYPE="${{ inputs.type || 'short' }}"
+          fi
           if [ -n "${{ inputs.day }}" ]; then
             DAY=${{ inputs.day }}
           else
@@ -41,15 +57,30 @@ jobs:
             DAY=$(( (NOW - START) / 86400 + 1 ))
           fi
           echo "day=$DAY" >> "$GITHUB_OUTPUT"
+          echo "type=$TYPE" >> "$GITHUB_OUTPUT"
 
-      - name: Render short
+      - name: Generate voiceover (Sarvam Bulbul v3)
+        env:
+          SARVAM_API_KEY: ${{ secrets.SARVAM_API_KEY }}
+        run: node scripts/tts.mjs --day "${{ steps.pick.outputs.day }}" --type "${{ steps.pick.outputs.type }}"
+
+      - name: Render video
         run: |
           npx remotion render src/index.ts ICShort \
-            "out/day-${{ steps.pick.outputs.day }}-short.mp4" \
+            "out/day-${{ steps.pick.outputs.day }}-${{ steps.pick.outputs.type }}.mp4" \
             --props "{\"day\": ${{ steps.pick.outputs.day }}}"
+
+      - name: Commit usage counter
+        run: |
+          git config user.name "ic-video-engine[bot]"
+          git config user.email "actions@github.com"
+          git add usage/usage.json
+          git commit -m "usage: day ${{ steps.pick.outputs.day }} ${{ steps.pick.outputs.type }} [skip ci]" || true
+          git pull --rebase origin main || true
+          git push || true
 
       - uses: actions/upload-artifact@v4
         with:
-          name: day-${{ steps.pick.outputs.day }}-videos
+          name: day-${{ steps.pick.outputs.day }}-${{ steps.pick.outputs.type }}
           path: out/*.mp4
           retention-days: 30

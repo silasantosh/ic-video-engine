@@ -22,6 +22,8 @@ export type ShortContent = {
   points: string[];
 };
 
+export type TimedLine = {text: string; start: number; duration: number};
+
 const Hook: React.FC<{text: string; moduleName: string}> = ({text, moduleName}) => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
@@ -29,12 +31,7 @@ const Hook: React.FC<{text: string; moduleName: string}> = ({text, moduleName}) 
   const opacity = interpolate(frame, [0, 12], [0, 1], {extrapolateRight: 'clamp'});
   return (
     <AbsoluteFill
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 90,
-        opacity,
-      }}
+      style={{justifyContent: 'center', alignItems: 'center', padding: 90, opacity}}
     >
       <div
         style={{
@@ -158,24 +155,10 @@ const EndCard: React.FC = () => {
           src={staticFile('logo.png')}
           style={{width: 300, height: 300, borderRadius: 72}}
         />
-        <div
-          style={{
-            fontFamily: FONT,
-            fontSize: 68,
-            fontWeight: 800,
-            color: BRAND.white,
-          }}
-        >
+        <div style={{fontFamily: FONT, fontSize: 68, fontWeight: 800, color: BRAND.white}}>
           impact-connect.in
         </div>
-        <div
-          style={{
-            fontFamily: FONT,
-            fontSize: 38,
-            fontWeight: 600,
-            color: BRAND.mint,
-          }}
-        >
+        <div style={{fontFamily: FONT, fontSize: 38, fontWeight: 600, color: BRAND.mint}}>
           connecting social sector
         </div>
       </div>
@@ -183,31 +166,29 @@ const EndCard: React.FC = () => {
   );
 };
 
-export const ICShort: React.FC<{content: ShortContent; voiceoverFile: string | null}> = ({
-  content,
-  voiceoverFile,
-}) => {
-  const hookFrames = 75;
-  const cardFrames = 100;
+export const ICShort: React.FC<{
+  content: ShortContent;
+  voiceoverFile: string | null;
+  lines: TimedLine[];
+}> = ({content, voiceoverFile, lines}) => {
+  // lines[0] = hook, lines[1..n-2] = point cards, lines[n-1] = end line over the end card
+  const hook = lines[0];
+  const cardLines = lines.slice(1, 1 + content.points.length);
+  const end = lines[lines.length - 1];
   return (
     <AbsoluteFill
-      style={{
-        background: `linear-gradient(180deg, ${BRAND.mint} 0%, ${BRAND.offWhite} 80%)`,
-      }}
+      style={{background: `linear-gradient(180deg, ${BRAND.mint} 0%, ${BRAND.offWhite} 80%)`}}
     >
-      {/* Voice slot: silent placeholder until the TTS audition winner
-          (Indic Parler / Kokoro) is wired in. Replace the file at
-          public/voice/voiceover.mp3 per day, or point voiceoverFile at a URL. */}
       {voiceoverFile ? <Audio src={staticFile(voiceoverFile)} /> : null}
-      <Sequence durationInFrames={hookFrames}>
+      <Sequence from={hook.start} durationInFrames={hook.duration}>
         <Hook text={content.hook} moduleName={content.module} />
       </Sequence>
-      {content.points.map((p, i) => (
-        <Sequence key={i} from={hookFrames + i * cardFrames} durationInFrames={cardFrames}>
-          <PointCard point={p} index={i} />
+      {cardLines.map((l, i) => (
+        <Sequence key={i} from={l.start} durationInFrames={l.duration}>
+          <PointCard point={content.points[i]} index={i} />
         </Sequence>
       ))}
-      <Sequence from={hookFrames + content.points.length * cardFrames}>
+      <Sequence from={end.start}>
         <EndCard />
       </Sequence>
     </AbsoluteFill>

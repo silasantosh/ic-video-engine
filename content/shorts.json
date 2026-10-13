@@ -10,6 +10,13 @@
         "Open impact-connect.in and tap Funding",
         "Filter grants by state, sector and amount",
         "Save a grant to follow its deadlines"
+      ],
+      "lines_hi": [
+        "आपके NGO के लिए grants, सब एक जगह",
+        "impact-connect.in खोलिए और Funding पर जाएए",
+        "state, sector और amount से filter कीजिए",
+        "पसंद का grant save कीजिए, deadlines की updates पाते रहिए",
+        "आज ही impact-connect.in खोलिए"
       ]
     },
     {
@@ -20,6 +27,13 @@
         "Browse live CSR opportunities from companies",
         "Check eligibility before you apply",
         "Keep your 80G and 12A details ready"
+      ],
+      "lines_hi": [
+        "companies अपने CSR projects यहाँ post करती हैं",
+        "live CSR opportunities देखिए",
+        "apply करने से पहले eligibility ज़रूर check कीजिए",
+        "अपने 80G और 12A documents तैयार रखिए",
+        "आज ही impact-connect.in खोलिए"
       ]
     },
     {
@@ -30,6 +44,13 @@
         "Search central and state schemes in one list",
         "Read who can apply and what documents you need",
         "Save schemes to revisit before the deadline"
+      ],
+      "lines_hi": [
+        "सरकारी schemes, आसान भाषा में",
+        "central और state schemes एक ही list में",
+        "कौन apply कर सकता है और कौन से documents चाहिए, पढ़िए",
+        "deadline से पहले scheme save कर लीजिए",
+        "आज ही impact-connect.in खोलिए"
       ]
     },
     {
@@ -40,6 +61,13 @@
         "Post your volunteer need in two minutes",
         "Volunteers near you see it first",
         "Track sign-ups from your dashboard"
+      ],
+      "lines_hi": [
+        "ऐसे volunteers पाइए जो सच में आते हैं",
+        "अपनी volunteer ज़रूरत दो मिनट में post कीजिए",
+        "आपके आस-पास के volunteers इसे सबसे पहले देखेंगे",
+        "dashboard से sign-ups track कीजिए",
+        "आज ही impact-connect.in खोलिए"
       ]
     },
     {
@@ -50,6 +78,13 @@
         "Open the Experts door on Impact Connect",
         "Find people who know FCRA, 80G and CSR-1",
         "Send your question directly, free"
+      ],
+      "lines_hi": [
+        "compliance में अटके हैं? expert से पूछिए",
+        "Impact Connect पर Experts खोलिए",
+        "FCRA, 80G और CSR-1 जानने वाले लोग मिलेंगे",
+        "अपना सवाल सीधे भेजिए, बिल्कुल free",
+        "आज ही impact-connect.in खोलिए"
       ]
     },
     {
@@ -60,6 +95,13 @@
         "Every NGO on Impact Connect is verified first",
         "Pick a cause you care about",
         "Donate directly - no middleman cut"
+      ],
+      "lines_hi": [
+        "अपने state के verified NGOs को donate कीजिए",
+        "Impact Connect पर हर NGO पहले verify होता है",
+        "अपनी पसंद की cause चुनिए",
+        "सीधे donate कीजिए, बिना किसी cut के",
+        "आज ही impact-connect.in खोलिए"
       ]
     },
     {
@@ -70,6 +112,13 @@
         "Open Learn from the home screen",
         "Short lessons on fundraising and compliance",
         "Come back daily - new lessons keep coming"
+      ],
+      "lines_hi": [
+        "पाँच मिनट की lessons में NGO skills सीखिए",
+        "home screen से Learn खोलिए",
+        "fundraising और compliance की छोटी lessons",
+        "रोज़ आइए, नई lessons आती रहती हैं",
+        "आज ही impact-connect.in खोलिए"
       ]
     },
     {
@@ -80,7 +129,128 @@
         "List items you no longer need on Daan",
         "NGOs request what they can use",
         "Hand it over and see where it went"
+      ],
+      "lines_hi": [
+        "आपकी पुरानी चीज़ें किसी cause के काम आ सकती हैं",
+        "जो चीज़ें ज़रूरत नहीं, उन्हें Daan पर list कीजिए",
+        "NGOs request करेंगे जो उन्हें काम आए",
+        "सौंप दीजिए और देखिए वह कहाँ पहुँची",
+        "आज ही impact-connect.in खोलिए"
+      ]
+    },
+    {
+      "day": 9,
+      "module": "People",
+      "hook": "Meet the people of the social sector",
+      "points": [
+        "Create your profile in People",
+        "Find people working in your field",
+        "Follow them and stay in touch"
+      ],
+      "lines_hi": [
+        "social sector के लोगों से जुड़िए",
+        "People में अपना profile बनाइए",
+        "अपने क्षेत्र में काम करने वालों को खोजिए",
+        "follow कीजिए और संपर्क में रहिए",
+        "आज ही impact-connect.in खोलिए"
+      ]
+    },
+    {
+      "day": 10,
+      "module": "Pro Bono",
+      "hook": "Free professional help for your NGO",
+      "points": [
+        "Write your need in Pro Bono",
+        "Lawyers, designers, accountants ready to help",
+        "Send a request, answers reach your dashboard"
+      ],
+      "lines_hi": [
+        "free professional मदद, आपके NGO के लिए",
+        "Pro Bono में अपनी ज़रूरत लिखिए",
+        "lawyers, designers, accountants मदद के लिए तैयार हैं",
+        "request भेजिए, जवाब आपके dashboard पर",
+        "आज ही impact-connect.in खोलिए"
+      ]
+    },
+    {
+      "day": 11,
+      "module": "Nonprofits",
+      "hook": "A directory of verified NGOs",
+      "points": [
+        "Search by state and cause in Nonprofits",
+        "Every profile verified and transparent",
+        "List your own NGO too"
+      ],
+      "lines_hi": [
+        "verified NGOs की बड़ी directory",
+        "Nonprofits में state और cause से खोजिए",
+        "हर profile verified और transparent",
+        "अपने NGO को भी list कराइए",
+        "आज ही impact-connect.in खोलिए"
+      ]
+    },
+    {
+      "day": 12,
+      "module": "Events",
+      "hook": "Social sector events in one calendar",
+      "points": [
+        "See events happening near you",
+        "Workshops, drives, meets - all here",
+        "Post your own event too"
+      ],
+      "lines_hi": [
+        "social sector के events, एक calendar में",
+        "अपने शहर के आस-पास के events देखिए",
+        "workshops, drives, meets, सब यहीं",
+        "अपना event भी post कीजिए",
+        "आज ही impact-connect.in खोलिए"
+      ]
+    },
+    {
+      "day": 13,
+      "module": "Disaster Response",
+      "hook": "Help reaches the right place in a disaster",
+      "points": [
+        "See live updates in Disaster Response",
+        "Ground reports and needs are verified",
+        "Join a response, alone or with your team"
+      ],
+      "lines_hi": [
+        "आपदा के समय, मदद सही जगह तक पहुँचे",
+        "Disaster Response में live updates देखिए",
+        "ground reports और ज़रूरतें verified होती हैं",
+        "response में जुड़िए, अकेले या अपनी team के साथ",
+        "आज ही impact-connect.in खोलिए"
+      ]
+    },
+    {
+      "day": 14,
+      "module": "Changemakers",
+      "hook": "Stories of people making change",
+      "points": [
+        "Meet real heroes in Changemakers",
+        "Take inspiration from their work",
+        "Share your own story too"
+      ],
+      "lines_hi": [
+        "बदलाव लाने वालों की कहानियाँ",
+        "Changemakers में असली heroes से मिलिए",
+        "उनके काम से प्रेरणा लीजिए",
+        "अपनी कहानी भी share कीजिए",
+        "आज ही impact-connect.in खोलिए"
       ]
     }
-  ]
+  ],
+  "tts": {
+    "short": {
+      "speaker": "shreya",
+      "language": "hi-IN"
+    },
+    "lesson": {
+      "speaker": "shubh",
+      "language": "hi-IN"
+    },
+    "model": "bulbul:v3",
+    "sampleRate": 24000
+  }
 }
