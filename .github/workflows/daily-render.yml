@@ -1,11 +1,11 @@
 name: Daily video render
 
-# 12:30 PM IST short = 07:00 UTC | 6:30 PM IST lesson = 13:00 UTC
+# 12:30 PM IST short = 07:00 UTC (18:30 lesson slot on hold)
 # GitHub Actions is free on public repos - Rs 0.
 on:
   schedule:
+    # 12:30 PM IST short only; 18:30 lesson slot held until lesson composition exists
     - cron: '0 7 * * *'
-    - cron: '0 13 * * *'
   workflow_dispatch:
     inputs:
       day:
