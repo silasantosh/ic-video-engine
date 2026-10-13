@@ -10,6 +10,7 @@
   "dependencies": {
     "@remotion/cli": "4.0.355",
     "@remotion/google-fonts": "4.0.355",
+    "music-metadata": "^11.16.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "remotion": "4.0.355"
