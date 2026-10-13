@@ -49,7 +49,7 @@ if (!b64) {
 fs.mkdirSync('public/voice', {recursive: true});
 fs.writeFileSync('public/voice/voiceover.mp3', Buffer.from(b64, 'base64'));
 
-const meta = await parseFile('public/voice/voiceover.mp3');
+const meta = await parseFile('public/voice/voiceover.mp3', {duration: true});
 const dur = meta.format.duration;
 if (!dur || !isFinite(dur)) { console.error('could not read mp3 duration'); process.exit(1); }
 const totalFrames = Math.ceil(dur * FPS) + 45; // 1.5s end-card hold after voice ends
