@@ -19,7 +19,10 @@ if (!key) {
 const cal = JSON.parse(fs.readFileSync('content/shorts.json', 'utf8'));
 const entry = cal.days.find((d) => d.day === day) ?? cal.days[(day - 1) % cal.days.length];
 const voice = cal.tts[type];
+if(!entry?.reviewed?.source) throw Error('Content not source-reviewed');
+const usageBefore=fs.existsSync('usage/usage.json')?JSON.parse(fs.readFileSync('usage/usage.json','utf8')):{total_chars:0};
 const lines = entry.lines_hi;
+if(usageBefore.total_chars+lines.join('\n').length>26000)throw Error('Free credit reserve reached');
 const text = lines.join('\n');
 
 console.log(`day ${day} (${entry.module}) type=${type} speaker=${voice.speaker} lang=${voice.language} chars=${text.length}`);
