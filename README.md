@@ -1,38 +1,37 @@
 # Impact Connect video engine
 
-Daily Impact Connect videos rendered with [Remotion](https://remotion.dev) on GitHub Actions. Rs 0: the repo is public, so Actions minutes are free, and there are no secrets in this repo.
+Remotion renders on free GitHub Actions in this public repository. Credentials are encrypted Actions secrets, never source files.
 
-- **12:30 PM IST** - daily Short (YouTube Shorts + Instagram)
-- **6:30 PM IST** - daily lesson slot
+## Current state (2026-10-14)
 
-The live video engine is untouched. This pipeline goes live only after Santosh approves the switch.
+- 12:30 PM IST Short: render plus Instagram publishing code is wired. First unattended publishing trial is pending, not proven complete.
+- Recovery cron: 12:47 PM IST. A committed publishing ledger stops duplicate sends. GitHub schedules can be delayed.
+- YouTube publishing: not wired. Direct Google authorization is awaiting owner approval. Buffer's connected channel is personal, not the IC brand channel; it must not receive these uploads.
+- 6:30 PM IST lesson: held. A separate longer lesson composition and YouTube publisher are still needed. Dispatching type=lesson currently changes the voice only, not the short composition.
 
-## How it works
+## Review and publication safety
 
-1. `content/shorts.json` holds the 90-day calendar (started 2026-10-06): days 1-30 one app module a day, 31-60 guides (80G/12A, CSR-1, FCRA, registration), 61-90 how-to and recaps. Each day has a hook, 2-3 points and the module name.
-2. `src/ICShort.tsx` is the branded template: hook scene, numbered point cards, end card with the real IC logo (`public/logo.png`, pulled from impact-connect.in) and `impact-connect.in`. Brand greens only, per Brand Kit v1.3 (`#0E6B45`, `#123B2E`, Signal Green `#49752B`, mint `#E3F3EA`), Noto Sans.
-3. `.github/workflows/daily-render.yml` renders the day's video on cron and stores it as a build artifact (kept 30 days). Run it by hand any time with Actions -> Daily video render -> Run workflow (optionally pass a day number).
+Each calendar entry must have a source review before rendering. Publishing also requires visual QA of its actual voiced artifact. Day 9 (People) was corrected to match the live page and inspected; other days have not yet passed review. Missing review stops the workflow rather than publishing guessed features.
 
-## Render locally
+`scripts/publish-instagram.mjs` verifies @impactconnect.india, stages the MP4 through the existing IG Worker, waits for Instagram processing, commits a publishing intent, publishes once, and commits the returned media ID. An uncertain publish is never auto-retried. Staged bytes are deleted after the attempt. Successful ledger records live in `usage/publishing.json`.
+
+Workflow failures open a repository issue containing the run link. Notification delivery to the owner is not yet tested. An issue is not proof an alert landed.
+
+## Voice and free budget
+
+Sarvam Bulbul v3 uses Shreya for shorts and Shubh for lessons, Hindi. `SARVAM_API_KEY` and `IG_ADMIN_KEY` live in Actions secrets. The usage counter is committed after each render. Generation stops at 26,000 tracked characters to preserve a reserve within the original free credits. No paid top-up is authorized. This counter does not prove the live Sarvam balance if the account is used elsewhere.
+
+## Evidence
+
+Manual render-only rehearsal: https://github.com/silasantosh/ic-video-engine/actions/runs/38517118421
+
+This is a successful render, not an unattended publishing proof. The actual 1080x1920, 16-second voiced People artifact was visually inspected and its Hindi transcript checked.
+
+## Local preview
 
 ```
 npm ci
-npx remotion render src/index.ts ICShort out/short.mp4 --props '{"day": 1}'
+npx remotion render src/index.ts ICShort out/short.mp4 --props '{"day":9}'
 ```
 
-Preview while editing: `npm run dev` (Remotion Studio).
-
-## Voice - Sarvam Bulbul v3 (his pick, Oct 13 2026)
-
-`scripts/tts.mjs` generates the day's Hindi narration in one request per video: speaker **shreya** for the 12:30 short, **shubh** for the 6:30 lesson, hi-IN, 24000 Hz, default pace/pitch. Scene timing follows the real audio: each scene's length is its line's character share of the actual mp3 duration, so text and narration stay matched. The API key lives only in the `SARVAM_API_KEY` Actions secret - never in the repo, never printed. If the key or credits fail, the workflow fails before render: no silent or placeholder video ever ships.
-
-Cost guardrail: characters are counted in `usage/usage.json` (committed back by the workflow). Rs 100 free credits is roughly 33k characters (Rs 30 per 10k). Report when about 20% remains; no top-up without his explicit yes on the amount.
-
-## Not wired yet (on purpose)
-
-- **Upload**: the existing YouTube upload pipeline stays with the current engine. After he approves the switch, add an upload step here (YouTube Shorts + Instagram via the existing tokens) - nothing posts from this repo today.
-- **Lesson (6:30 PM) format**: the cron slot exists; the longer lesson template reuses this system and gets its own composition next.
-
-## License
-
-Remotion is free for this use (individual + nonprofit, fewer than 3 people) - verified before adoption.
+The 90-day calendar is in `content/shorts.json`. Template source is in `src/ICShort.tsx`. Remotion licensing was checked for this individual/nonprofit use before adoption.
