@@ -158,6 +158,13 @@
         "date": "2026-10-14",
         "source": "https://impact-connect.in/people",
         "note": "Live page has 0 consented profiles; private review before publication; no account required."
+      },
+      "visualApproved": {
+        "run": "https://github.com/silasantosh/ic-video-engine/actions/runs/38517118421",
+        "artifact_sha256": "63ef07af9942ba04b9017a7473810cb6b247fc92374a196d3634fc6764fd283b",
+        "checked": "2026-10-14",
+        "audio": "Hindi transcript matches reviewed script; no silent audio",
+        "visual": "1080x1920 actual voiced artifact inspected: hook, cards, logo, end card fit"
       }
     },
     {
