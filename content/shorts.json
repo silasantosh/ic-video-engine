@@ -141,19 +141,24 @@
     {
       "day": 9,
       "module": "People",
-      "hook": "Meet the people of the social sector",
+      "hook": "Offer your time and skills",
       "points": [
-        "Create your profile in People",
-        "Find people working in your field",
-        "Follow them and stay in touch"
+        "Open People on impact-connect.in",
+        "Use the secure form to offer your skills",
+        "Submissions are checked before they appear"
       ],
       "lines_hi": [
-        "social sector के लोगों से जुड़िए",
-        "People में अपना profile बनाइए",
-        "अपने क्षेत्र में काम करने वालों को खोजिए",
-        "follow कीजिए और संपर्क में रहिए",
+        "अपना समय और हुनर समाज के काम लाइए",
+        "impact-connect.in पर People खोलिए",
+        "secure form से अपनी skills की जानकारी भेजिए",
+        "जानकारी जाँच के बाद ही दिखाई जाती है",
         "आज ही impact-connect.in खोलिए"
-      ]
+      ],
+      "reviewed": {
+        "date": "2026-10-14",
+        "source": "https://impact-connect.in/people",
+        "note": "Live page has 0 consented profiles; private review before publication; no account required."
+      }
     },
     {
       "day": 10,
