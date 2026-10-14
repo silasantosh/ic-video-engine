@@ -18,12 +18,17 @@ on:
         type: string
         default: short
 
+concurrency:
+  group: daily-video
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
 jobs:
   render:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -59,6 +64,12 @@ jobs:
           echo "day=$DAY" >> "$GITHUB_OUTPUT"
           echo "type=$TYPE" >> "$GITHUB_OUTPUT"
 
+      - name: Check content review and free credit budget
+        run: |
+          node -e 'const fs=require("fs");const c=require("./content/shorts.json");const d=c.days.find(d=>d.day===Number(process.env.DAY));if(!d?.reviewed?.source)throw Error("Content not source-reviewed");const u=JSON.parse(fs.readFileSync("usage/usage.json"));if(u.total_chars+d.lines_hi.join("\\n").length>26000)throw Error("Free credit safety reserve reached; no paid top-up");'
+        env:
+          DAY: ${{ steps.pick.outputs.day }}
+
       - name: Generate voiceover (Sarvam Bulbul v3)
         env:
           SARVAM_API_KEY: ${{ secrets.SARVAM_API_KEY }}
@@ -76,8 +87,8 @@ jobs:
           git config user.email "actions@github.com"
           git add usage/usage.json
           git commit -m "usage: day ${{ steps.pick.outputs.day }} ${{ steps.pick.outputs.type }} [skip ci]" || true
-          git pull --rebase origin main || true
-          git push || true
+          git pull --rebase origin main
+          git push
 
       - uses: actions/upload-artifact@v4
         if: failure()
@@ -91,3 +102,15 @@ jobs:
           name: day-${{ steps.pick.outputs.day }}-${{ steps.pick.outputs.type }}
           path: out/*.mp4
           retention-days: 30
+
+      - name: Publish reviewed Short to Instagram
+        if: steps.pick.outputs.type == 'short'
+        run: |
+          if node -e 'const c=require("./content/shorts.json");process.exit(c.days.find(d=>d.day===Number(process.env.DAY))?.visualApproved ? 0 : 1)' ; then
+            node scripts/publish-instagram.mjs "out/day-${{ steps.pick.outputs.day }}-short.mp4" "${{ steps.pick.outputs.day }}"
+          else
+            echo "Visual QA not approved; render saved, no post made."
+          fi
+        env:
+          IG_ADMIN_KEY: ${{ secrets.IG_ADMIN_KEY }}
+          DAY: ${{ steps.pick.outputs.day }}
