@@ -6,6 +6,8 @@ on:
   schedule:
     # 12:30 PM IST short only; 18:30 lesson slot held until lesson composition exists
     - cron: '0 7 * * *'
+    # Recovery opportunity if GitHub drops/delays the primary cron. Ledger prevents duplicate posts.
+    - cron: '17 7 * * *'
   workflow_dispatch:
     inputs:
       day:
@@ -24,6 +26,7 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   render:
@@ -114,3 +117,12 @@ jobs:
         env:
           IG_ADMIN_KEY: ${{ secrets.IG_ADMIN_KEY }}
           DAY: ${{ steps.pick.outputs.day }}
+
+      - name: Record failure for owner notifications
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "Daily video failed: day ${{ steps.pick.outputs.day }} ${{ steps.pick.outputs.type }}" \
+            --body "A daily render or Instagram publish failed. Check the run before retrying any uncertain publication: https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. No paid retry or top-up is authorized."
