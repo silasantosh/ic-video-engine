@@ -1,0 +1,69 @@
+name: Dummy motion benchmark (manual only)
+on: workflow_dispatch
+permissions: {}
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Prepare free software
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-noto-core python3-psutil
+      - name: Prepare self-contained dummy test
+        run: |
+          mkdir -p /tmp/video-motion-test/raw /downloads
+          cd /tmp/video-motion-test
+          cat > demo.html <<'DUMMY_FILE_EOF'
+          <!doctype html><html lang="hi"><meta charset="utf-8"><style>
+          *{box-sizing:border-box}body{margin:0;background:#f4efec;color:#251f21;font-family:'Noto Sans Devanagari',sans-serif;font-size:27px}header{position:sticky;top:0;background:#fff;padding:22px 28px;z-index:3;border-bottom:1px solid #eae9ea;font:20px sans-serif}main{padding:34px}h1{font-size:42px;line-height:1.45;margin:0 0 20px}p{line-height:1.7}.card{padding:30px;background:white;border-radius:24px;margin-bottom:25px;box-shadow:0 4px 18px #251f2109}.tag{font:18px sans-serif;color:#585254;margin-bottom:20px}button{font:600 27px 'Noto Sans Devanagari';padding:20px 28px;border:0;border-radius:14px;background:#73a89a;color:#251f21;width:100%}#notice{display:none;background:#fff;padding:24px;border-radius:20px;margin-top:20px}#cursor{position:fixed;width:34px;height:34px;border:5px solid #251f21;border-radius:50%;left:520px;top:800px;z-index:10;pointer-events:none;transition:left .55s,top .55s,transform .25s}small{font-size:22px;color:#585254}.space{height:50px}
+          </style><header>PRIVATE TEST · DUMMY CONTENT</header><main><div class="tag">MOTION + HINDI + SYNC TEST</div><h1>काम से शुरू करें,<br>तलाश से नहीं।</h1><p>यह सिर्फ एक परीक्षण है।<br>किसी असली ऐप का स्क्रीन नहीं।</p><div class="card"><small>उदाहरण की जरूरत</small><h2>टीम के लिए जानकारी</h2><p>जानकारी पढ़ें। समझें।<br>फिर अगला कदम चुनें।</p></div><div class="space"></div><div class="card"><h2>बाद में फिर देखें</h2><p>इस नमूने को सँभालकर रखें।</p><button id="save">नमूना सेव करें</button><div id="notice">✓ नमूना सेव हुआ<br><small>सिर्फ इस परीक्षण के लिए</small></div></div><p>कोई खाता, असली डेटा या सार्वजनिक पोस्ट नहीं।</p></main><div id="cursor"></div><script>save.onclick=()=>{save.textContent='✓ सेव हो गया';notice.style.display='block';document.body.dataset.saved='yes'}</script></html>
+          
+          DUMMY_FILE_EOF
+          cat > test.cjs <<'DUMMY_FILE_EOF'
+          const {chromium}=require('playwright');const fs=require('fs');
+          (async()=>{let t=Date.now();const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});const context=await browser.newContext({viewport:{width:720,height:1280},recordVideo:{dir:'/tmp/video-motion-test/raw',size:{width:720,height:1280}}});const page=await context.newPage();await page.goto('file:///tmp/video-motion-test/demo.html');await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:'/tmp/video-motion-test/start.png'});let start=Date.now();await page.waitForTimeout(450);await page.evaluate(()=>window.scrollTo({top:430,behavior:'smooth'}));await page.waitForTimeout(750);const box=await page.locator('#save').boundingBox();await page.evaluate(({x,y})=>{const c=document.querySelector('#cursor');c.style.left=x+'px';c.style.top=y+'px'}, {x:box.x+box.width/2-17,y:box.y+box.height/2-17});await page.waitForTimeout(600);await page.locator('#save').click();let clicked=Date.now();await page.screenshot({path:'/tmp/video-motion-test/saved.png'});if(await page.locator('body').getAttribute('data-saved')!=='yes')throw Error('Dummy save failed');await page.waitForTimeout(3500);await context.close();fs.writeFileSync('/tmp/video-motion-test/timing.json',JSON.stringify({startup_ms:start-t,click_after_ms:clicked-start,active_record_ms:Date.now()-start,total_ms:Date.now()-t,video:await page.video().path()},null,2));await browser.close()})()
+          
+          DUMMY_FILE_EOF
+          cat > bench.py <<'DUMMY_FILE_EOF'
+          import subprocess,time,psutil,json,sys,resource
+          start=time.monotonic();p=subprocess.Popen(sys.argv[2:],cwd='/tmp/video-motion-test');peak=cpu=0
+          while p.poll() is None:
+           try:
+            procs=[psutil.Process(p.pid)]+psutil.Process(p.pid).children(recursive=True);rss=0;c=0
+            for q in procs:
+             try:rss+=q.memory_info().rss;c+=sum(q.cpu_times()[:2])
+             except psutil.Error:pass
+            peak=max(peak,rss);cpu=max(cpu,c)
+           except psutil.Error:pass
+           time.sleep(.05)
+          j={'exit':p.returncode,'wall_seconds':round(time.monotonic()-start,3),'peak_sampled_process_tree_rss_mib':round(peak/1048576,1),'sampled_cpu_seconds':round(cpu,3),'sampling_ms':50};json.dump(j,open(sys.argv[1],'w'),indent=2);print(j);sys.exit(p.returncode)
+          
+          DUMMY_FILE_EOF
+          cat > render.py <<'DUMMY_FILE_EOF'
+          import json,subprocess
+          raw=json.load(open('/tmp/video-motion-test/timing.json'))['video']
+          cmd=['ffmpeg','-v','error','-y','-i',raw,'-f','lavfi','-i','sine=frequency=880:sample_rate=48000:duration=0.1','-filter_complex',"[0:v]fps=30,split[a][b];[a]trim=start=0.15:end=2.9,setpts=PTS-STARTPTS[a1];[b]trim=start=2.65:end=5.4,setpts=PTS-STARTPTS[b1];[a1][b1]xfade=transition=fade:duration=0.5:offset=2.25,drawbox=x=640:y=90:w=42:h=42:color=white:t=fill:enable='between(t,2.5,2.6)',format=yuv420p[v];[1:a]volume=0.12,adelay=2500|2500,apad=whole_dur=5[a]",'-map','[v]','-map','[a]','-t','5','-c:v','libx264','-preset','fast','-profile:v','main','-c:a','aac','-ar','48000','-movflags','+faststart','/downloads/dummy-motion-transition-5s.mp4']
+          subprocess.run(cmd,check=True)
+          
+          DUMMY_FILE_EOF
+          npm init -y >/dev/null
+          npm install --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          npx playwright install ffmpeg
+      - name: Capture and render benchmark
+        run: |
+          cd /tmp/video-motion-test
+          google-chrome --version
+          ffmpeg -version | head -3
+          python3 bench.py capture-benchmark.json node test.cjs
+          python3 bench.py render-benchmark.json python3 render.py
+          ffmpeg -v error -i /downloads/dummy-motion-transition-5s.mp4 -f null -
+          ffprobe -v error -show_entries format=duration,size -of json /downloads/dummy-motion-transition-5s.mp4
+          cat capture-benchmark.json render-benchmark.json timing.json
+          {
+            echo '## Dummy-only benchmark'
+            echo 'No secrets, no checkout, no voice service, no publishing.'
+            echo '```json'
+            cat capture-benchmark.json render-benchmark.json timing.json
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
