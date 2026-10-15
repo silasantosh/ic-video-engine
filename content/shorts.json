@@ -187,6 +187,12 @@
         "date": "2026-10-15",
         "source": "https://impact-connect.in/probono",
         "note": "Live page is software-offer directory with 0 offers plus website checklist and cost inputs; not a professional-request marketplace."
+      },
+      "visualApproved": {
+        "at": "2026-10-15",
+        "run": "https://github.com/silasantosh/ic-video-engine/actions/runs/38680945332",
+        "sha256": "2c7d4dbdea48da2d78b495a8b8bb7e01cca193653f015927f552596ec0014a4e",
+        "note": "Actual voiced MP4 sampled frames inspected: hook, 3 cards, logo/end card fit. Audio transcript matches source-correct script. Hindi Sarvam."
       }
     },
     {
