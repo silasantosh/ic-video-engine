@@ -169,20 +169,25 @@
     },
     {
       "day": 10,
-      "module": "Pro Bono",
-      "hook": "Free professional help for your NGO",
+      "module": "Probono",
+      "hook": "Plan your nonprofit website",
       "points": [
-        "Write your need in Pro Bono",
-        "Lawyers, designers, accountants ready to help",
-        "Send a request, answers reach your dashboard"
+        "Open Probono on impact-connect.in",
+        "Use the step-by-step website checklist",
+        "Enter your own domain and hosting quotes"
       ],
       "lines_hi": [
-        "free professional मदद, आपके NGO के लिए",
-        "Pro Bono में अपनी ज़रूरत लिखिए",
-        "lawyers, designers, accountants मदद के लिए तैयार हैं",
-        "request भेजिए, जवाब आपके dashboard पर",
-        "आज ही impact-connect.in खोलिए"
-      ]
+        "अपने nonprofit की website की योजना बनाइए",
+        "impact-connect.in पर Probono खोलिए",
+        "website की step by step checklist पढ़िए",
+        "domain और hosting के अपने quotes लिखिए",
+        "जानकारी जाँचकर ही अगला कदम उठाइए"
+      ],
+      "reviewed": {
+        "date": "2026-10-15",
+        "source": "https://impact-connect.in/probono",
+        "note": "Live page is software-offer directory with 0 offers plus website checklist and cost inputs; not a professional-request marketplace."
+      }
     },
     {
       "day": 11,
