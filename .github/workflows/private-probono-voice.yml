@@ -1,0 +1,38 @@
+name: Private Probono narration
+on: workflow_dispatch
+permissions:
+  contents: write
+concurrency:
+  group: daily-video
+  cancel-in-progress: false
+jobs:
+  voice:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Private narration only, never publish
+        env:
+          SARVAM_API_KEY: ${{ secrets.SARVAM_API_KEY }}
+        run: |
+          cat > /tmp/voice.mjs <<'JS'
+          import fs from 'node:fs';
+          const text="Probono में nonprofit के लिए software offers की जानकारी मिलती है। इसी पेज पर website की योजना बनाने का helper भी है। अपनी checklist के पूरे हुए काम tick कीजिए। domain और hosting के अपने quotes लिखिए। इस उदाहरण में आठ सौ और चौबीस सौ का कुल तीन हज़ार दो सौ रुपये है। ये केवल उदाहरण है, बाज़ार की कीमत नहीं।";
+          const u=JSON.parse(fs.readFileSync('usage/usage.json'));if(u.total_chars+text.length>26000)throw Error('Free reserve reached');
+          const r=await fetch('https://api.sarvam.ai/text-to-speech',{method:'POST',headers:{'api-subscription-key':process.env.SARVAM_API_KEY,'content-type':'application/json'},body:JSON.stringify({text,target_language_code:'hi-IN',speaker:'shreya',model:'bulbul:v3',speech_sample_rate:24000,enable_preprocessing:true})});if(!r.ok)throw Error('TTS HTTP '+r.status);const j=await r.json();if(!j.audios?.[0])throw Error('No audio');fs.mkdirSync('draft-audio',{recursive:true});fs.writeFileSync('draft-audio/probono.mp3',Buffer.from(j.audios[0],'base64'));u.total_chars+=text.length;u.total_requests++;u.log.push({ts:new Date().toISOString(),day:10,type:'private-correction',chars:text.length});fs.writeFileSync('usage/usage.json',JSON.stringify(u,null,2)+'\n');
+          JS
+          node /tmp/voice.mjs
+          git config user.name 'ic-video-engine[bot]'
+          git config user.email 'actions@github.com'
+          git add usage/usage.json
+          git commit -m 'usage: private Probono correction [skip ci]'
+          git pull --rebase origin main
+          git push
+      - uses: actions/upload-artifact@v4
+        with:
+          name: private-probono-narration
+          path: draft-audio/probono.mp3
+          retention-days: 3
