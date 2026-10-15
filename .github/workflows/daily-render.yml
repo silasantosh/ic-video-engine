@@ -73,18 +73,28 @@ jobs:
         env:
           DAY: ${{ steps.pick.outputs.day }}
 
+      - name: Skip duplicate publication before consuming voice credits
+        id: duplicate
+        env:
+          TYPE: ${{ steps.pick.outputs.type }}
+        run: |
+          node -e 'const fs=require("fs");const date=new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Kolkata"});const p="usage/publishing.json";const r=fs.existsSync(p)?JSON.parse(fs.readFileSync(p)):{};const state=r[date+"-short-instagram"]?.state;if(process.env.TYPE==="short"&&["publishing","uncertain"].includes(state))throw Error("Previous publication uncertain; reconcile before retry");fs.appendFileSync(process.env.GITHUB_OUTPUT,"skip="+(process.env.TYPE==="short"&&state==="published")+"\n");'
+
       - name: Generate voiceover (Sarvam Bulbul v3)
+        if: steps.duplicate.outputs.skip != 'true'
         env:
           SARVAM_API_KEY: ${{ secrets.SARVAM_API_KEY }}
         run: node scripts/tts.mjs --day "${{ steps.pick.outputs.day }}" --type "${{ steps.pick.outputs.type }}"
 
       - name: Render video
+        if: steps.duplicate.outputs.skip != 'true'
         run: |
           npx remotion render src/index.ts ICShort \
             "out/day-${{ steps.pick.outputs.day }}-${{ steps.pick.outputs.type }}.mp4" \
             --props "{\"day\": ${{ steps.pick.outputs.day }}}"
 
       - name: Commit usage counter
+        if: steps.duplicate.outputs.skip != 'true'
         run: |
           git config user.name "ic-video-engine[bot]"
           git config user.email "actions@github.com"
@@ -101,13 +111,14 @@ jobs:
           retention-days: 7
 
       - uses: actions/upload-artifact@v4
+        if: steps.duplicate.outputs.skip != 'true'
         with:
           name: day-${{ steps.pick.outputs.day }}-${{ steps.pick.outputs.type }}
           path: out/*.mp4
           retention-days: 30
 
       - name: Publish reviewed Short to Instagram
-        if: steps.pick.outputs.type == 'short'
+        if: steps.pick.outputs.type == 'short' && steps.duplicate.outputs.skip != 'true'
         run: |
           if node -e 'const c=require("./content/shorts.json");process.exit(c.days.find(d=>d.day===Number(process.env.DAY))?.visualApproved ? 0 : 1)' ; then
             node scripts/publish-instagram.mjs "out/day-${{ steps.pick.outputs.day }}-short.mp4" "${{ steps.pick.outputs.day }}"
