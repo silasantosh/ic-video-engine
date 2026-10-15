@@ -12,7 +12,7 @@ jobs:
           sudo apt-get install -y ffmpeg fonts-noto-core python3-psutil
       - name: Prepare self-contained dummy test
         run: |
-          mkdir -p /tmp/video-motion-test/raw /downloads
+          mkdir -p /tmp/video-motion-test/raw /tmp/video-motion-test/output
           cd /tmp/video-motion-test
           cat > demo.html <<'DUMMY_FILE_EOF'
           <!doctype html><html lang="hi"><meta charset="utf-8"><style>
@@ -43,7 +43,7 @@ jobs:
           cat > render.py <<'DUMMY_FILE_EOF'
           import json,subprocess
           raw=json.load(open('/tmp/video-motion-test/timing.json'))['video']
-          cmd=['ffmpeg','-v','error','-y','-i',raw,'-f','lavfi','-i','sine=frequency=880:sample_rate=48000:duration=0.1','-filter_complex',"[0:v]fps=30,split[a][b];[a]trim=start=0.15:end=2.9,setpts=PTS-STARTPTS[a1];[b]trim=start=2.65:end=5.4,setpts=PTS-STARTPTS[b1];[a1][b1]xfade=transition=fade:duration=0.5:offset=2.25,drawbox=x=640:y=90:w=42:h=42:color=white:t=fill:enable='between(t,2.5,2.6)',format=yuv420p[v];[1:a]volume=0.12,adelay=2500|2500,apad=whole_dur=5[a]",'-map','[v]','-map','[a]','-t','5','-c:v','libx264','-preset','fast','-profile:v','main','-c:a','aac','-ar','48000','-movflags','+faststart','/downloads/dummy-motion-transition-5s.mp4']
+          cmd=['ffmpeg','-v','error','-y','-i',raw,'-f','lavfi','-i','sine=frequency=880:sample_rate=48000:duration=0.1','-filter_complex',"[0:v]fps=30,split[a][b];[a]trim=start=0.15:end=2.9,setpts=PTS-STARTPTS[a1];[b]trim=start=2.65:end=5.4,setpts=PTS-STARTPTS[b1];[a1][b1]xfade=transition=fade:duration=0.5:offset=2.25,drawbox=x=640:y=90:w=42:h=42:color=white:t=fill:enable='between(t,2.5,2.6)',format=yuv420p[v];[1:a]volume=0.12,adelay=2500|2500,apad=whole_dur=5[a]",'-map','[v]','-map','[a]','-t','5','-c:v','libx264','-preset','fast','-profile:v','main','-c:a','aac','-ar','48000','-movflags','+faststart','/tmp/video-motion-test/output/dummy-motion-transition-5s.mp4']
           subprocess.run(cmd,check=True)
           
           DUMMY_FILE_EOF
@@ -57,8 +57,8 @@ jobs:
           ffmpeg -version | head -3
           python3 bench.py capture-benchmark.json node test.cjs
           python3 bench.py render-benchmark.json python3 render.py
-          ffmpeg -v error -i /downloads/dummy-motion-transition-5s.mp4 -f null -
-          ffprobe -v error -show_entries format=duration,size -of json /downloads/dummy-motion-transition-5s.mp4
+          ffmpeg -v error -i /tmp/video-motion-test/output/dummy-motion-transition-5s.mp4 -f null -
+          ffprobe -v error -show_entries format=duration,size -of json /tmp/video-motion-test/output/dummy-motion-transition-5s.mp4
           cat capture-benchmark.json render-benchmark.json timing.json
           {
             echo '## Dummy-only benchmark'
