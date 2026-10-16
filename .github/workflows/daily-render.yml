@@ -10,6 +10,11 @@ on:
     - cron: '17 7 * * *'
   workflow_dispatch:
     inputs:
+      preflight_only:
+        description: Readiness check only, no voice/render/publishing
+        required: false
+        type: boolean
+        default: false
       day:
         description: 'Calendar day number (leave empty for today)'
         required: false
@@ -29,7 +34,54 @@ permissions:
   issues: write
 
 jobs:
+  readiness:
+    name: Content readiness (no credits or publishing)
+    runs-on: ubuntu-latest
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check content, budget and publication state
+        id: check
+        env:
+          INPUT_DAY: ${{ inputs.day }}
+          INPUT_TYPE: ${{ inputs.type }}
+        run: |
+          node <<'NODE'
+          const fs=require('fs'),assert=require('node:assert/strict');
+          const c=JSON.parse(fs.readFileSync('content/shorts.json'));
+          const u=JSON.parse(fs.readFileSync('usage/usage.json'));
+          const p=JSON.parse(fs.readFileSync('usage/publishing.json'));
+          const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+          const day=Number(process.env.INPUT_DAY||Math.floor((Date.parse(today)-Date.parse(c.startDate))/86400000)+1);
+          const type=process.env.INPUT_TYPE||'short';
+          function assess(d,t,usage,state){
+            if(t!=='short')return 'held: Long lesson composition and YouTube are not enabled';
+            if(['publishing','uncertain'].includes(state))return 'held: reconcile uncertain publication before retry';
+            if(state==='published')return 'held: already published for this date';
+            if(!d)return 'held: no content entry for this calendar day';
+            if(!d.reviewed?.source)return 'held: content needs source review; do not bypass';
+            if(!Array.isArray(d.lines_hi)||!d.lines_hi.length)return 'held: Hindi script missing';
+            if(usage+d.lines_hi.join('\n').length>26000)return 'held: free voice safety reserve reached; no top-up';
+            return 'ready';
+          }
+          const sample={reviewed:{source:'fixture'},lines_hi:['test']};
+          assert.equal(assess({},'short',0,''),'held: content needs source review; do not bypass');
+          assert.equal(assess(sample,'short',0,''),'ready');
+          assert.match(assess(sample,'short',26000,''),/reserve/);
+          assert.match(assess(sample,'short',0,'uncertain'),/uncertain/);
+          assert.match(assess(sample,'lesson',0,''),/Long/);
+          assert.match(assess(sample,'short',0,'published'),/already/);
+          assert.match(assess(undefined,'short',0,''),/no content/);
+          const reason=assess(c.days.find(d=>d.day===day),type,u.total_chars,p[today+'-short-instagram']?.state);
+          const ready=reason==='ready';
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,'ready='+ready+'\n');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,'## Daily video readiness\nDate: '+today+'; day: '+day+'; type: '+type+'\n\n'+reason+'\n\nSeven preflight safety assertions passed. A held result is not a completed render or post.\n');
+          console.log('Preflight tests passed. '+reason);
+          NODE
   render:
+    needs: readiness
+    if: needs.readiness.outputs.ready == 'true' && inputs.preflight_only != true
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
