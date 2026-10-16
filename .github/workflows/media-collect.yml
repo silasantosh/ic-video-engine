@@ -1,0 +1,64 @@
+name: CC0 media collection
+on:
+  workflow_dispatch:
+  push:
+    branches: [scratch/media-collector-20261016]
+    paths: ['collectors/media/**', '.github/workflows/media-collect.yml']
+  schedule:
+    - cron: '23 */6 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: cc0-media-collection
+  cancel-in-progress: false
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: code
+      - uses: actions/checkout@v4
+        with:
+          ref: media-queue
+          path: collection-state
+      - name: Parser safety tests
+        run: python3 code/collectors/media/test_collect.py
+      - name: Bounded collection with restart support
+        env:
+          MEDIA_COLLECTOR_HOME: ${{ github.workspace }}/collection-state
+          COLLECT_MAX_PER_SITE: '2'
+        run: bash code/collectors/media/run.sh
+      - name: Validate source-only queue
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('collection-state/queue/media-queue.json')
+          x=json.loads(p.read_text())['entries']
+          assert len(x)==len({e['source_page'] for e in x})
+          for e in x:
+            assert e['source'] in ('isorepublic.com','negativespace.co')
+            assert e['licence']=='CC0' and e['collected_at']
+          print('Validated',len(x),'unique CC0 records')
+          PY
+      - name: Persist queue and checkpoints (even on failed pass)
+        if: always()
+        working-directory: collection-state
+        run: |
+          git config user.name 'media-collector[bot]'
+          git config user.email 'actions@github.com'
+          git add queue state
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update CC0 media queue and checkpoints [skip ci]'
+            git push origin HEAD:media-queue
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cc0-media-queue
+          path: |
+            collection-state/queue/
+            collection-state/logs/
+          retention-days: 7
