@@ -29,7 +29,7 @@ jobs:
           git apply /tmp/collector.patch
           git config user.name 'media-collector[bot]'
           git config user.email 'actions@github.com'
-          git add collectors/media .github/workflows/media-collect.yml
+          git add collectors/media
           git commit -m 'Add isolated CC0 collector for scratch runner test'
           git push origin HEAD:scratch/media-collector-20261016
       - name: Create source-only queue orphan branch
@@ -67,7 +67,7 @@ jobs:
           print('Types:',dict(collections.Counter(e['media_type'] for e in x)))
           PYCODE
       - name: Persist queue and checkpoints
-        if: always()
+        if: always() && hashFiles('collection-state/.git') != ''
         working-directory: collection-state
         run: |
           git add queue state
