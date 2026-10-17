@@ -109,7 +109,7 @@ def parse_ns(html, page_url):
 
 PARSERS = {'iso': parse_iso, 'ns': parse_ns}
 
-def run_site(key, cfg):
+def _run_site(key, cfg):
     pause_path = os.path.join(STATE, 'paused-%s.json' % key)
     if os.path.exists(pause_path):
         log('%s: paused pending manual review' % key); return 0
@@ -212,6 +212,30 @@ def run_site(key, cfg):
     log('%s: %d new entries (fetched %d pages)' % (key, new_count, fetches))
     return new_count
 
+OUTCOMES = []
+def run_site(key, cfg):
+    messages = []
+    original_log = globals()['log']
+    def site_log(msg):
+        messages.append(msg)
+        original_log(msg)
+    globals()['log'] = site_log
+    started = datetime.now(timezone.utc).isoformat()
+    try:
+        count = _run_site(key, cfg)
+        errors = [m for m in messages if any(x in m for x in ('failed (', 'paused pending', 'no matching sub-sitemaps'))]
+        fetched = 0
+        for m in messages:
+            hit = re.search(r'fetched (\d+) pages', m)
+            if hit: fetched = int(hit.group(1))
+        OUTCOMES.append({'site':key,'started_at':started,'finished_at':datetime.now(timezone.utc).isoformat(),'new_entries':count,'fetched_pages':fetched,'status':'attention' if errors else 'ok','errors':errors})
+        return count
+    except Exception as exc:
+        OUTCOMES.append({'site':key,'started_at':started,'finished_at':datetime.now(timezone.utc).isoformat(),'new_entries':0,'status':'failed','errors':[str(exc)[:300]]})
+        raise
+    finally:
+        globals()['log'] = original_log
+
 QUEUED = set()
 def export_queue():
     records = []
@@ -234,14 +258,20 @@ def main():
             for line in f:
                 if line.strip(): QUEUED.add(json.loads(line)['source_page'])
     export_queue()
+    OUTCOMES.clear()
+    save_json(os.path.join(STATE, 'heartbeat.json'), {'status':'running','started_at':datetime.now(timezone.utc).isoformat(),'run_url':os.environ.get('MEDIA_RUN_URL')})
     total = 0
     for key, cfg in SITES.items():
         try:
             total += run_site(key, cfg)
         except Exception as e:
             log('%s: unexpected error %r - continuing' % (key, e))
-    log('run complete: %d new entries' % total)
-    return 0
+    status = 'attention' if any(x['status'] != 'ok' for x in OUTCOMES) else 'ok'
+    records = load_json(os.path.join(BASE,'queue','media-queue.json'),{'entries':[]})['entries']
+    summary = {'schema_version':1,'status':status,'completed_at':datetime.now(timezone.utc).isoformat(),'new_entries':total,'queue_count':len(records),'sites':OUTCOMES,'run_url':os.environ.get('MEDIA_RUN_URL')}
+    save_json(os.path.join(STATE,'heartbeat.json'),summary)
+    log('run complete: %d new entries; status=%s' % (total,status))
+    return 0 if status == 'ok' else 2
 
 if __name__ == '__main__':
     sys.exit(main())

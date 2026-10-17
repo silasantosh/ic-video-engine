@@ -1,9 +1,6 @@
 name: CC0 media collection
 on:
   workflow_dispatch:
-  push:
-    branches: [scratch/media-collector-20261016]
-    paths: ['collectors/media/**', '.github/workflows/media-collect.yml']
   schedule:
     - cron: '23 */6 * * *'
 permissions:
@@ -24,11 +21,14 @@ jobs:
           ref: media-queue
           path: collection-state
       - name: Parser safety tests
-        run: python3 code/collectors/media/test_collect.py
+        run: |
+          python3 code/collectors/media/test_collect.py
+          python3 code/collectors/media/test_outcomes.py
       - name: Bounded collection with restart support
         env:
           MEDIA_COLLECTOR_HOME: ${{ github.workspace }}/collection-state
           COLLECT_MAX_PER_SITE: '2'
+          MEDIA_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: bash code/collectors/media/run.sh
       - name: Validate source-only queue
         run: |
@@ -43,6 +43,31 @@ jobs:
             assert e['licence']=='CC0' and e['collected_at']
           print('Validated',len(x),'unique CC0 records')
           PY
+      - name: Record run outcome and summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          MEDIA_RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          python3 - <<'PYCODE'
+          import json,os,datetime
+          from pathlib import Path
+          root=Path('collection-state');state=root/'state';state.mkdir(exist_ok=True)
+          p=state/'heartbeat.json'
+          x=json.loads(p.read_text()) if p.exists() else {}
+          if x.get('run_url') != os.environ['MEDIA_RUN_URL']:
+              x={'status':'failed','runner_error':'No fresh collector heartbeat for this run.'}
+          if os.environ['JOB_STATUS'] != 'success' or x.get('status') == 'running':
+              x['status']='failed';x['runner_error']='Workflow step failed; inspect linked run. Do not restart blocked sources.'
+          x['run_url']=os.environ['MEDIA_RUN_URL'];x['observed_at']=datetime.datetime.now(datetime.timezone.utc).isoformat()
+          p.write_text(json.dumps(x,indent=2))
+          receipts=state/'runs';receipts.mkdir(exist_ok=True)
+          receipt=receipts/(os.environ['GITHUB_RUN_ID']+'-'+os.environ['GITHUB_RUN_ATTEMPT']+'.json')
+          if not receipt.exists():receipt.write_text(json.dumps(x,indent=2))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              f.write('## CC0 collector outcome\n\nStatus: '+x.get('status','unknown')+'\n\nQueue: '+str(x.get('queue_count','unverified'))+'; new: '+str(x.get('new_entries','unverified'))+'\n\n')
+              for site in x.get('sites',[]):f.write('- '+site['site']+': '+site['status']+', fetched '+str(site.get('fetched_pages','unknown'))+', new '+str(site.get('new_entries','unknown'))+'; '+str(site.get('errors',[]))+'\n')
+          PYCODE
       - name: Persist queue and checkpoints (even on failed pass)
         if: always()
         working-directory: collection-state
@@ -61,4 +86,6 @@ jobs:
           path: |
             collection-state/queue/
             collection-state/logs/
+            collection-state/state/heartbeat.json
+            collection-state/state/runs/
           retention-days: 7

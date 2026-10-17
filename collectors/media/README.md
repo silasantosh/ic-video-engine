@@ -41,19 +41,24 @@ ISO photo and video extraction both tested. A video test downloaded a real 11-se
 
 `run.sh` bounds a pass to 10 minutes and retries a failed process at most
 three times, with a 60-second pause. It uses only Python's standard library.
-Suggested cadence: every 6 hours, at most 12 new item pages per site/pass.
-No scheduler or durable hosting is installed in this environment. Parent
-must assign the existing free runner/backup destination before claiming
-unattended operation or survival of workspace replacement. No new account
-or service was created. Restart support is prepared, not deployed.
+Live cadence: the existing separate GitHub workflow runs every 6 hours, with
+2 new item pages per lane (6 total). It persists public source-only queue and
+cursors on the separate media-queue branch. It uses no renderer secrets and
+has its own concurrency lock. A broken source is not proof the whole collector
+needs a restart. Do not replace remote state with a stale local queue.
 
-## Proposed existing GitHub runner
+## Outcome repair status
 
-`.github/workflows/media-collect.yml` is independent of the video renderer.
-It checks out the separate `media-queue` branch for public CC0 source-only
-queue/checkpoints. The scratch-branch push trigger enables an explicit test
-before merge; scheduled execution starts only after repository-owner merge
-into the default branch. No render, voice, or publication secrets are used.
-Current workflow cap is 2 new item pages per lane per run (6 total).
-Artifacts expire after 7 days, but queue/state commits persist on media-queue.
-This is code awaiting repository-owner review, not a merged/live deployment.
+The outcome/heartbeat repair in this working copy is tested locally but not
+deployed. Applying it requires the scoped repository credential approval.
+Do not claim the repaired heartbeat exists until a new real workflow run
+persists state/heartbeat.json and its immutable state/runs receipt.
+The repair records per-site fetched/new/error outcomes, exits 2 on a blocked
+source without retrying it, and writes the linked run result to the Actions
+summary. Only process failures receive at most3attempts with60second backoff.
+
+Private Drive backups are separate from public Actions. A private checkpoint
+has been uploaded to the existing Website backup/in-media folder. Independent
+nightly Drive automation is not yet confirmed; no Drive credentials belong
+in this public repository. All collection is source links only, no downloads
+or publishing.
