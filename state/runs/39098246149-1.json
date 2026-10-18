@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "ok",
+  "completed_at": "2026-10-18T04:47:36.291863+00:00",
+  "new_entries": 6,
+  "queue_count": 71,
+  "sites": [
+    {
+      "site": "isorepublic-video",
+      "started_at": "2026-10-18T04:46:23.780809+00:00",
+      "finished_at": "2026-10-18T04:46:50.982273+00:00",
+      "new_entries": 2,
+      "fetched_pages": 2,
+      "status": "ok",
+      "errors": []
+    },
+    {
+      "site": "isorepublic",
+      "started_at": "2026-10-18T04:46:50.982288+00:00",
+      "finished_at": "2026-10-18T04:47:12.048570+00:00",
+      "new_entries": 2,
+      "fetched_pages": 2,
+      "status": "ok",
+      "errors": []
+    },
+    {
+      "site": "negativespace",
+      "started_at": "2026-10-18T04:47:12.048586+00:00",
+      "finished_at": "2026-10-18T04:47:36.291679+00:00",
+      "new_entries": 2,
+      "fetched_pages": 2,
+      "status": "ok",
+      "errors": []
+    }
+  ],
+  "run_url": "https://github.com/silasantosh/ic-video-engine/actions/runs/39098246149",
+  "observed_at": "2026-10-18T04:47:36.393663+00:00"
+}
