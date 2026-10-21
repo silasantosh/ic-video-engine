@@ -8,7 +8,7 @@ import {execSync} from 'node:child_process';
 const FPS = 30;
 const args = Object.fromEntries(process.argv.slice(2).map((a, i, arr) => a.startsWith('--') ? [a.slice(2), arr[i + 1]] : null).filter(Boolean));
 const day = parseInt(args.day || '1', 10);
-const type = args.type === 'lesson' ? 'lesson' : 'short';
+const type = ['lesson', 'long'].includes(args.type) ? args.type : 'short';
 
 const key = process.env.SARVAM_API_KEY;
 if (!key) {
@@ -16,7 +16,8 @@ if (!key) {
   process.exit(1);
 }
 
-const cal = JSON.parse(fs.readFileSync('content/shorts.json', 'utf8'));
+const calFile = type === 'long' ? 'content/longs.json' : 'content/shorts.json';
+const cal = JSON.parse(fs.readFileSync(calFile, 'utf8'));
 const entry = cal.days.find((d) => d.day === day) ?? cal.days[(day - 1) % cal.days.length];
 const voice = cal.tts[type];
 if(!entry?.reviewed?.source) throw Error('Content not source-reviewed');
