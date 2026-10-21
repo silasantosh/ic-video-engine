@@ -158,6 +158,9 @@ jobs:
           SRC="out/day-${{ steps.pick.outputs.day }}-${{ steps.pick.outputs.type }}.mp4"
           npx remotion ffmpeg -y -i "$SRC" -c:v libx264 -pix_fmt yuv420p -vf scale=out_range=limited -crf 20 -preset medium -c:a copy -movflags +faststart "out/.phone-safe.mp4"
           mv "out/.phone-safe.mp4" "$SRC"
+          echo "PROBE-BEGIN"
+          npx remotion ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,pix_fmt,color_range,color_space -of default=noprint_wrappers=1 "$SRC"
+          echo "PROBE-END"
 
       - name: Commit usage counter
         if: steps.duplicate.outputs.skip != 'true'
