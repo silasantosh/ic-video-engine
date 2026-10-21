@@ -20,7 +20,7 @@ on:
         required: false
         type: string
       type:
-        description: 'short or lesson'
+        description: 'short, lesson (retired) or long'
         required: false
         type: string
         default: short
@@ -49,14 +49,15 @@ jobs:
         run: |
           node <<'NODE'
           const fs=require('fs'),assert=require('node:assert/strict');
-          const c=JSON.parse(fs.readFileSync('content/shorts.json'));
+          const type=process.env.INPUT_TYPE||'short';
+          const calFile=type==='long'?'content/longs.json':'content/shorts.json';
+          const c=JSON.parse(fs.readFileSync(calFile));
           const u=JSON.parse(fs.readFileSync('usage/usage.json'));
           const p=JSON.parse(fs.readFileSync('usage/publishing.json'));
           const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
           const day=Number(process.env.INPUT_DAY||Math.floor((Date.parse(today)-Date.parse(c.startDate))/86400000)+1);
-          const type=process.env.INPUT_TYPE||'short';
           function assess(d,t,usage,state){
-            if(t!=='short')return 'held: Long lesson composition and YouTube are not enabled';
+            if(t==='lesson')return 'held: lesson type retired; use long';
             if(['publishing','uncertain'].includes(state))return 'held: reconcile uncertain publication before retry';
             if(state==='published')return 'held: already published for this date';
             if(!d)return 'held: no content entry for this calendar day';
@@ -70,13 +71,16 @@ jobs:
           assert.equal(assess(sample,'short',0,''),'ready');
           assert.match(assess(sample,'short',26000,''),/reserve/);
           assert.match(assess(sample,'short',0,'uncertain'),/uncertain/);
-          assert.match(assess(sample,'lesson',0,''),/Long/);
+          assert.match(assess(sample,'lesson',0,''),/retired/);
+          assert.equal(assess(sample,'long',0,''),'ready');
+          assert.match(assess(undefined,'long',0,''),/no content/);
           assert.match(assess(sample,'short',0,'published'),/already/);
           assert.match(assess(undefined,'short',0,''),/no content/);
-          const reason=assess(c.days.find(d=>d.day===day),type,u.total_chars,p[today+'-short-instagram']?.state);
+          const ledgerKey=type==='long'?today+'-long-youtube':today+'-short-instagram';
+          const reason=assess(c.days.find(d=>d.day===day),type,u.total_chars,p[ledgerKey]?.state);
           const ready=reason==='ready';
           fs.appendFileSync(process.env.GITHUB_OUTPUT,'ready='+ready+'\n');
-          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,'## Daily video readiness\nDate: '+today+'; day: '+day+'; type: '+type+'\n\n'+reason+'\n\nSeven preflight safety assertions passed. A held result is not a completed render or post.\n');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,'## Daily video readiness\nDate: '+today+'; day: '+day+'; type: '+type+'\n\n'+reason+'\n\nNine preflight safety assertions passed. A held result is not a completed render or post.\n');
           console.log('Preflight tests passed. '+reason);
           NODE
   render:
@@ -103,7 +107,7 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "schedule" ]; then
             case "${{ github.event.schedule }}" in
-              "0 13 * * *") TYPE=lesson ;;
+              "0 13 * * *") TYPE=long ;;
               *) TYPE=short ;;
             esac
           else
@@ -112,7 +116,8 @@ jobs:
           if [ -n "${{ inputs.day }}" ]; then
             DAY=${{ inputs.day }}
           else
-            START=$(date -u -d "$(jq -r .startDate content/shorts.json)" +%s)
+            CAL=content/shorts.json; [ "$TYPE" = "long" ] && CAL=content/longs.json
+            START=$(date -u -d "$(jq -r .startDate $CAL)" +%s)
             NOW=$(date -u +%s)
             DAY=$(( (NOW - START) / 86400 + 1 ))
           fi
@@ -121,9 +126,10 @@ jobs:
 
       - name: Check content review and free credit budget
         run: |
-          node -e 'const fs=require("fs");const c=require("./content/shorts.json");const d=c.days.find(d=>d.day===Number(process.env.DAY));if(!d?.reviewed?.source)throw Error("Content not source-reviewed");const u=JSON.parse(fs.readFileSync("usage/usage.json"));if(u.total_chars+d.lines_hi.join("\\n").length>26000)throw Error("Free credit safety reserve reached; no paid top-up");'
+          node -e 'const fs=require("fs");const f=process.env.TYPE==="long"?"./content/longs.json":"./content/shorts.json";const c=require(f);const d=c.days.find(d=>d.day===Number(process.env.DAY));if(!d?.reviewed?.source)throw Error("Content not source-reviewed");const u=JSON.parse(fs.readFileSync("usage/usage.json"));if(u.total_chars+d.lines_hi.join("\\n").length>26000)throw Error("Free credit safety reserve reached; no paid top-up");'
         env:
           DAY: ${{ steps.pick.outputs.day }}
+          TYPE: ${{ steps.pick.outputs.type }}
 
       - name: Skip duplicate publication before consuming voice credits
         id: duplicate
@@ -141,7 +147,8 @@ jobs:
       - name: Render video
         if: steps.duplicate.outputs.skip != 'true'
         run: |
-          npx remotion render src/index.ts ICShort \
+          COMP=ICShort; [ "${{ steps.pick.outputs.type }}" = "long" ] && COMP=ICLong
+          npx remotion render src/index.ts $COMP \
             "out/day-${{ steps.pick.outputs.day }}-${{ steps.pick.outputs.type }}.mp4" \
             --props "{\"day\": ${{ steps.pick.outputs.day }}}"
 
