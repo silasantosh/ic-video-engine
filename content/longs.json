@@ -1,0 +1,71 @@
+{
+  "calendarNote": "Evening Long videos (YouTube only) at 18:30 IST, 3-4 per week; entries exist only on intended days. First Long ships render-only until he approves it. Brand rule (his call Oct 1): green shades only, no yellow/orange.",
+  "startDate": "2026-10-22",
+  "tts": {
+    "long": {
+      "speaker": "shubh",
+      "language": "hi-IN"
+    },
+    "model": "bulbul:v3",
+    "sampleRate": 24000
+  },
+  "days": [
+    {
+      "day": 1,
+      "module": "Overview",
+      "title": "Impact Connect par shuruaat kaise karein",
+      "hook": "Free help for NGOs, CSR and volunteering",
+      "sections": [
+        {
+          "heading": "Kya hai Impact Connect",
+          "points": [
+            "Free website for NGOs, CSR, volunteering",
+            "Har route review karke dikhaya jata hai"
+          ]
+        },
+        {
+          "heading": "Volunteering",
+          "points": [
+            "Apni pasand ki cause chuniye",
+            "Kya share karna hai, aapke haath mein"
+          ]
+        },
+        {
+          "heading": "Opportunities",
+          "points": [
+            "Jobs aur internships official sources se",
+            "Apply sirf official source se"
+          ]
+        },
+        {
+          "heading": "Probono aur Learn",
+          "points": [
+            "Nonprofits ke liye software offers",
+            "Muft courses bhi"
+          ]
+        },
+        {
+          "heading": "Bharosa kaise",
+          "points": [
+            "Har listing ke saath source",
+            "Review date dikhata hai"
+          ]
+        }
+      ],
+      "lines_hi": [
+        "नमस्ते! आज जानते हैं impact-connect.in, जो NGOs, CSR और volunteering के लिए free help देता है",
+        "Impact Connect एक free website है, जहाँ हर route review करके दिखाया जाता है",
+        "Volunteering में अपनी पसंद की cause चुनिए; क्या share करना है, ये आपके हाथ में है",
+        "Opportunities में jobs और internships official sources से आती हैं; apply हमेशा official source से कीजिए",
+        "Probono में nonprofits के लिए software offers हैं, और Learn में मुफ़्त courses भी",
+        "भरोसे के लिए हर listing के साथ source और review date दिखता है",
+        "तो आज ही impact-connect.in खोलिए, और अपना रास्ता चुनिए"
+      ],
+      "reviewed": {
+        "date": "2026-10-21",
+        "source": "https://impact-connect.in/",
+        "note": "Grounded Oct 21 against live homepage (title: Free help for NGOs, CSR and volunteering in India; tagline: reviewed nonprofit, CSR, learning, volunteering and giving routes) and live app bundle: Volunteering cause filters + consent-based private sharing; Opportunities official-source listings with disclaimer to apply only via official source; Probono software offers; Learn free courses; listings carry source and review date. No claims beyond these."
+      }
+    }
+  ]
+}
