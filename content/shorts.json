@@ -198,19 +198,24 @@
     {
       "day": 11,
       "module": "Nonprofits",
-      "hook": "A directory of verified NGOs",
+      "hook": "A directory of source-labelled NGOs",
       "points": [
-        "Search by state and cause in Nonprofits",
-        "Every profile verified and transparent",
-        "List your own NGO too"
+        "Search by state and sector in Nonprofits",
+        "Every record shows its source",
+        "Free to browse on Impact Connect"
       ],
       "lines_hi": [
-        "verified NGOs की बड़ी directory",
-        "Nonprofits में state और cause से खोजिए",
-        "हर profile verified और transparent",
-        "अपने NGO को भी list कराइए",
+        "source-labelled NGOs की बड़ी directory",
+        "Nonprofits में state और sector से खोजिए",
+        "हर record का source साफ़ दिखता है",
+        "सब कुछ free है",
         "आज ही impact-connect.in खोलिए"
-      ]
+      ],
+      "reviewed": {
+        "date": "2026-10-21",
+        "source": "https://impact-connect.in/nonprofits/",
+        "note": "Live page is a source-labelled nonprofit directory browsable by state, sector and location. It does NOT claim verified profiles and has no list-your-own-NGO route; script lines corrected to match."
+      }
     },
     {
       "day": 12,
