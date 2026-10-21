@@ -327,6 +327,13 @@
         "date": "2026-10-21",
         "source": "https://impact-connect.in/volunteering",
         "note": "Live app: Volunteering lists opportunities with organisation, state/district, SDG cause filter and official source links with verified dates. Consent flow copy: volunteer re-confirms which private fields may be shared; approved details are shared privately. Script mirrors this consent model without promising placements."
+      },
+      "visualApproved": {
+        "at": "2026-10-21",
+        "run": "https://github.com/silasantosh/ic-video-engine/actions/runs/39578799412",
+        "sha256": "d849000fa89fdf61125492a2257e4fd3dca337cb22e3c828a9eea8b99434760f",
+        "note": "Actual voiced MP4 contact-sheet inspected: hook, 3 cards, logo end card fit 1080x1920. Audio non-silent; Hindi transcript matches reviewed Volunteering script.",
+        "drive": "https://drive.google.com/file/d/1F1JlTNtw5jFAML7BYSg-OXElIdzped0R/view"
       }
     },
     {
