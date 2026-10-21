@@ -262,6 +262,94 @@
         "अपनी कहानी भी share कीजिए",
         "आज ही impact-connect.in खोलिए"
       ]
+    },
+    {
+      "day": 15,
+      "module": "Opportunities",
+      "hook": "Social sector jobs and internships in one place",
+      "points": [
+        "Open Opportunities on impact-connect.in",
+        "Filter by Type: job, internship, fellowship and more",
+        "Apply only through the official source after checking its rules"
+      ],
+      "lines_hi": [
+        "social sector की jobs और internships एक ही जगह देखिए",
+        "impact-connect.in पर Opportunities खोलिए",
+        "पहले Type filter चुनिए: job, internship या fellowship",
+        "हर listing का source और review date दिखता है",
+        "apply हमेशा official source से, नियम जाँचकर कीजिए"
+      ],
+      "reviewed": {
+        "date": "2026-10-21",
+        "source": "https://impact-connect.in/opportunities",
+        "note": "Live app: Opportunities lists jobs, internships, fellowships, contracts and freelance projects from official sources with a Type filter first. Site's own words: it verifies the published source and review date but is not the employer and does not guarantee role, selection or salary; apply only through the official source after checking current rules. Script mirrors this and claims nothing more."
+      }
+    },
+    {
+      "day": 16,
+      "module": "Learn",
+      "hook": "Free courses for nonprofit skills",
+      "points": [
+        "Open Learn on impact-connect.in",
+        "Pick free courses and guides by cause",
+        "Open the official provider page to start"
+      ],
+      "lines_hi": [
+        "nonprofit काम की skills मुफ़्त में सीखिए",
+        "impact-connect.in पर Learn खोलिए",
+        "free courses और guides अपने cause से चुनिए",
+        "जैसे Open University के OpenLearn courses",
+        "शुरू करने के लिए official provider page खोलिए"
+      ],
+      "reviewed": {
+        "date": "2026-10-21",
+        "source": "https://impact-connect.in/learn",
+        "note": "Live app: Learn lists resources with provider, type, access and cause fields, marked Official source reviewed; includes free The Open University OpenLearn courses (access: Free), e.g. Introducing the voluntary sector and leadership practice. Script only claims free courses exist and to start from the official provider page."
+      }
+    },
+    {
+      "day": 17,
+      "module": "Volunteering",
+      "hook": "Choose a cause, volunteer your way",
+      "points": [
+        "Open Volunteering on impact-connect.in",
+        "Filter opportunities by SDG cause and state",
+        "You choose what details to share; sharing is private"
+      ],
+      "lines_hi": [
+        "अपनी पसंद की cause चुनकर volunteer कीजिए",
+        "impact-connect.in पर Volunteering खोलिए",
+        "SDG cause और state से opportunities छाँटिए",
+        "कौन सी details share हों, ये आप तय करते हैं",
+        "आज ही impact-connect.in खोलिए"
+      ],
+      "reviewed": {
+        "date": "2026-10-21",
+        "source": "https://impact-connect.in/volunteering",
+        "note": "Live app: Volunteering lists opportunities with organisation, state/district, SDG cause filter and official source links with verified dates. Consent flow copy: volunteer re-confirms which private fields may be shared; approved details are shared privately. Script mirrors this consent model without promising placements."
+      }
+    },
+    {
+      "day": 18,
+      "module": "Events",
+      "hook": "Workshops and events for the social sector",
+      "points": [
+        "Open Events on impact-connect.in",
+        "Browse reviewed workshops and training",
+        "Dates and prices can change; check the organiser first"
+      ],
+      "lines_hi": [
+        "social sector के workshops और events देखिए",
+        "impact-connect.in पर Events खोलिए",
+        "reviewed workshops और training एक जगह",
+        "date और price बदल सकते हैं",
+        "register से पहले organiser से ज़रूर confirm कीजिए"
+      ],
+      "reviewed": {
+        "date": "2026-10-21",
+        "source": "https://impact-connect.in/events",
+        "note": "Live page words: Reviewed workshops, training and events. Dates and prices may change; check the organiser before registering. Script repeats exactly that caution."
+      }
     }
   ],
   "tts": {
