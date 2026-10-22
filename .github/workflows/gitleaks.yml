@@ -1,0 +1,46 @@
+name: Gitleaks advisory scan
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks (advisory, never fails)
+        id: scan
+        continue-on-error: true
+        run: |
+          set -e
+          VER=$(curl -sSf https://api.github.com/repos/gitleaks/gitleaks/releases/latest | python3 -c "import sys,json;print(json.load(sys.stdin)['tag_name'].lstrip('v'))" || echo "8.24.3")
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${VER}/gitleaks_${VER}_linux_x64.tar.gz" | tar -xz gitleaks
+          ./gitleaks detect --source . --redact --report-format json --report-path gitleaks-report.json --exit-code 0 || true
+          FINDINGS=$(python3 -c "import json,os;print(len(json.load(open('gitleaks-report.json'))) if os.path.exists('gitleaks-report.json') else 0)")
+          echo "findings=$FINDINGS" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Gitleaks advisory scan"
+            echo
+            echo "Version: ${VER} | Findings: **${FINDINGS}** (secrets redacted; full report in the gitleaks-report artifact)"
+            echo
+            echo "Advisory only: this job never fails the build. Review findings manually before acting."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-report
+          path: gitleaks-report.json
+          if-no-files-found: ignore
+          retention-days: 30
