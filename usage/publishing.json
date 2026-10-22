@@ -16,10 +16,11 @@
     "media_id": "18089280392305713"
   },
   "2026-10-22-short-instagram": {
-    "state": "publishing",
+    "state": "published",
     "day": 17,
-    "at": "2026-10-22T07:01:00.868Z",
+    "at": "2026-10-22T07:01:09.555Z",
     "run": "https://github.com/silasantosh/ic-video-engine/actions/runs/39737332352",
-    "container_id": "18126744505820775"
+    "container_id": "18126744505820775",
+    "media_id": "18098268602539421"
   }
 }
