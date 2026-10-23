@@ -362,6 +362,14 @@
         "date": "2026-10-21",
         "source": "https://impact-connect.in/events",
         "note": "Live page words: Reviewed workshops, training and events. Dates and prices may change; check the organiser before registering. Script repeats exactly that caution."
+      },
+      "visualApproved": {
+        "at": "2026-10-23",
+        "run": "https://github.com/silasantosh/ic-video-engine/actions/runs/39954703697",
+        "sha256": "c987cdf0fdcf94e132d90b14877b8ddfd67a495a70ae86006de8554a8108a68d",
+        "note": "Actual voiced MP4 QA: 1080x1920 yuv420p color_range=tv 30fps 16.04s; contact-sheet inspected - hook, cards 1-3, logo end card all render in frame; audio non-silent (mean -24.1 dB); transcript matches reviewed Events script exactly incl. organiser-confirm caution.",
+        "drive": "https://drive.google.com/file/d/1sWkRBbeOc8m5gRyvZ5iPptO5TZAJSJea/view",
+        "publishApproved": "Standing user grant, originals on his WhatsApp channel: 2026-10-05 20:53:49 IST 'YouTube and instagram 2 videos everyday is also not uploaded' + 20:54:44 IST 'Upload everyday even if I review or not'; reaffirmed 2026-10-07 20:30:20 IST 'Even your videos for YouTube and instagram is not working'. No per-day review required by the grant; visual QA gate applied per post."
       }
     }
   ],
