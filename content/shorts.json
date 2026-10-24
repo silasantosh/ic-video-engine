@@ -371,6 +371,28 @@
         "drive": "https://drive.google.com/file/d/1sWkRBbeOc8m5gRyvZ5iPptO5TZAJSJea/view",
         "publishApproved": "Standing user grant, originals on his WhatsApp channel: 2026-10-05 20:53:49 IST 'YouTube and instagram 2 videos everyday is also not uploaded' + 20:54:44 IST 'Upload everyday even if I review or not'; reaffirmed 2026-10-07 20:30:20 IST 'Even your videos for YouTube and instagram is not working'. No per-day review required by the grant; visual QA gate applied per post."
       }
+    },
+    {
+      "day": 19,
+      "module": "Funding",
+      "hook": "Funding opportunities for your NGO, in one place",
+      "points": [
+        "Open Funding on impact-connect.in",
+        "Browse nonprofit funding opportunities",
+        "Apply through the official source link"
+      ],
+      "lines_hi": [
+        "आपके NGO के लिए funding opportunities देखिए",
+        "impact-connect.in पर Funding खोलिए",
+        "nonprofit funding opportunities एक जगह",
+        "हर opportunity के साथ official source link",
+        "apply करने से पहले official source ज़रूर देखिए"
+      ],
+      "reviewed": {
+        "date": "2026-10-24",
+        "source": "https://impact-connect.in/funding",
+        "note": "Live page words: Browse nonprofit funding opportunities and official source links. Script repeats exactly that and sends viewers to the official source before applying."
+      }
     }
   ],
   "tts": {
