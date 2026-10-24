@@ -392,6 +392,14 @@
         "date": "2026-10-24",
         "source": "https://impact-connect.in/funding",
         "note": "Live page words: Browse nonprofit funding opportunities and official source links. Script repeats exactly that and sends viewers to the official source before applying."
+      },
+      "visualApproved": {
+        "at": "2026-10-24",
+        "run": "https://github.com/silasantosh/ic-video-engine/actions/runs/40066436799",
+        "sha256": "c8727c5120086005b1223d74f6ab1d749c4158d6e03577b26bdd550f370d6b22",
+        "note": "Actual voiced MP4 QA: 1080x1920 yuv420p color_range=tv 30fps 16.93s; contact-sheet plus settled full-size frames inspected - hook, cards 1-3 and logo end card all render in frame and legible; audio non-silent (mean -23.8 dB, max -3.9 dB); transcript matches reviewed Funding script exactly including official-source caution.",
+        "drive": "https://drive.google.com/file/d/1KdccIlrgQ5jyB76nmSYhkJvELHzk5O21/view",
+        "publishApproved": "Standing user grant, originals on his WhatsApp channel: 2026-10-05 20:53:49 IST 'YouTube and instagram 2 videos everyday is also not uploaded' + 20:54:44 IST 'Upload everyday even if I review or not'; reaffirmed 2026-10-07 20:30:20 IST 'Even your videos for YouTube and instagram is not working'. No per-day review required by the grant; visual QA gate applied per post."
       }
     }
   ],
