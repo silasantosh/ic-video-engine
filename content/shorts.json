@@ -422,6 +422,14 @@
         "date": "2026-10-25",
         "source": "https://impact-connect.in/csr",
         "note": "Live page words: CSR information and published proposal sources. Listings and registration data do not establish eligibility. Script repeats exactly that caution."
+      },
+      "visualApproved": {
+        "at": "2026-10-25",
+        "run": "https://github.com/silasantosh/ic-video-engine/actions/runs/40165521931",
+        "sha256": "7493d7da37a1b60b571c4e46e38c246b3744765a6d3424013a94e0aea23462fd",
+        "note": "Actual voiced MP4 QA: 1080x1920 yuv420p color_range=tv 30fps 17.97s; contact-sheet plus settled full-size frames inspected - hook, cards 1-3 and logo end card all render in frame and legible; audio non-silent (mean -23.8 dB, max -4.0 dB); transcript matches reviewed CSR script exactly including eligibility caution.",
+        "drive": "https://drive.google.com/file/d/1KNBRQYvQwFhKL2pq71cAeU1ebVRnxtXW/view",
+        "publishApproved": "Standing user grant, originals on his WhatsApp channel: 2026-10-05 20:53:49 IST 'YouTube and instagram 2 videos everyday is also not uploaded' + 20:54:44 IST 'Upload everyday even if I review or not'; reaffirmed 2026-10-07 20:30:20 IST 'Even your videos for YouTube and instagram is not working'. No per-day review required by the grant; visual QA gate applied per post."
       }
     }
   ],
