@@ -401,6 +401,28 @@
         "drive": "https://drive.google.com/file/d/1KdccIlrgQ5jyB76nmSYhkJvELHzk5O21/view",
         "publishApproved": "Standing user grant, originals on his WhatsApp channel: 2026-10-05 20:53:49 IST 'YouTube and instagram 2 videos everyday is also not uploaded' + 20:54:44 IST 'Upload everyday even if I review or not'; reaffirmed 2026-10-07 20:30:20 IST 'Even your videos for YouTube and instagram is not working'. No per-day review required by the grant; visual QA gate applied per post."
       }
+    },
+    {
+      "day": 20,
+      "module": "CSR Opportunities",
+      "hook": "CSR projects and proposals, in one place",
+      "points": [
+        "Open CSR on impact-connect.in",
+        "Browse CSR information and proposal sources",
+        "Listings do not establish eligibility"
+      ],
+      "lines_hi": [
+        "CSR projects और proposals एक जगह देखिए",
+        "impact-connect.in पर CSR खोलिए",
+        "CSR information और published proposal sources मिलते हैं",
+        "याद रखिए, listing होना eligibility नहीं है",
+        "apply करने से पहले eligibility ज़रूर check कीजिए"
+      ],
+      "reviewed": {
+        "date": "2026-10-25",
+        "source": "https://impact-connect.in/csr",
+        "note": "Live page words: CSR information and published proposal sources. Listings and registration data do not establish eligibility. Script repeats exactly that caution."
+      }
     }
   ],
   "tts": {
