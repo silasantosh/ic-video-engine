@@ -431,6 +431,28 @@
         "drive": "https://drive.google.com/file/d/1KNBRQYvQwFhKL2pq71cAeU1ebVRnxtXW/view",
         "publishApproved": "Standing user grant, originals on his WhatsApp channel: 2026-10-05 20:53:49 IST 'YouTube and instagram 2 videos everyday is also not uploaded' + 20:54:44 IST 'Upload everyday even if I review or not'; reaffirmed 2026-10-07 20:30:20 IST 'Even your videos for YouTube and instagram is not working'. No per-day review required by the grant; visual QA gate applied per post."
       }
+    },
+    {
+      "day": 21,
+      "module": "Schemes",
+      "hook": "Government schemes, in plain words",
+      "points": [
+        "Open Schemes on impact-connect.in",
+        "Welfare schemes from official sources",
+        "Apply on the official portal"
+      ],
+      "lines_hi": [
+        "सरकारी schemes अब सरल शब्दों में",
+        "impact-connect.in पर Schemes खोलिए",
+        "official sources की welfare schemes एक जगह",
+        "हर scheme reviewed source के साथ",
+        "apply करने से पहले official portal पर eligibility ज़रूर check कीजिए"
+      ],
+      "reviewed": {
+        "date": "2026-10-26",
+        "source": "https://impact-connect.in/schemes",
+        "note": "Live page words: Government schemes, in plain words. Welfare schemes from official sources, reviewed before listing. Check eligibility and apply on the official portal. Script repeats exactly that; source count omitted as a stale-able number."
+      }
     }
   ],
   "tts": {
