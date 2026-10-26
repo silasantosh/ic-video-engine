@@ -46,5 +46,12 @@
     "run": "https://github.com/silasantosh/ic-video-engine/actions/runs/40165722458",
     "container_id": "18127491313820775",
     "media_id": "18135308857657395"
+  },
+  "2026-10-26-short-instagram": {
+    "state": "publishing",
+    "day": 21,
+    "at": "2026-10-26T05:36:20.923Z",
+    "run": "https://github.com/silasantosh/ic-video-engine/actions/runs/40274951638",
+    "container_id": "18127792135820775"
   }
 }
