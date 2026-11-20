@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "status": "ok",
-  "completed_at": "2026-11-19T20:49:27.592856+00:00",
+  "completed_at": "2026-11-20T07:30:49.726088+00:00",
   "new_entries": 4,
-  "queue_count": 569,
+  "queue_count": 573,
   "sites": [
     {
       "site": "isorepublic-video",
-      "started_at": "2026-11-19T20:48:20.829764+00:00",
-      "finished_at": "2026-11-19T20:48:37.023645+00:00",
+      "started_at": "2026-11-20T07:29:42.663811+00:00",
+      "finished_at": "2026-11-20T07:29:58.006125+00:00",
       "new_entries": 0,
       "fetched_pages": 0,
       "status": "ok",
@@ -16,8 +16,8 @@
     },
     {
       "site": "isorepublic",
-      "started_at": "2026-11-19T20:48:37.023665+00:00",
-      "finished_at": "2026-11-19T20:49:00.719717+00:00",
+      "started_at": "2026-11-20T07:29:58.006142+00:00",
+      "finished_at": "2026-11-20T07:30:23.019585+00:00",
       "new_entries": 2,
       "fetched_pages": 2,
       "status": "ok",
@@ -25,14 +25,14 @@
     },
     {
       "site": "negativespace",
-      "started_at": "2026-11-19T20:49:00.719733+00:00",
-      "finished_at": "2026-11-19T20:49:27.591656+00:00",
+      "started_at": "2026-11-20T07:30:23.019599+00:00",
+      "finished_at": "2026-11-20T07:30:49.725229+00:00",
       "new_entries": 2,
       "fetched_pages": 2,
       "status": "ok",
       "errors": []
     }
   ],
-  "run_url": "https://github.com/silasantosh/ic-video-engine/actions/runs/44612364450",
-  "observed_at": "2026-11-19T20:49:27.682887+00:00"
+  "run_url": "https://github.com/silasantosh/ic-video-engine/actions/runs/44695351900",
+  "observed_at": "2026-11-20T07:30:49.800675+00:00"
 }
